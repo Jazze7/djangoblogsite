@@ -1,0 +1,23 @@
+{% extends 'users/auth_base.html' %} {% load static %}{% block content %}
+<section class="form">
+  <h1>Login page</h1>
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="formrow">
+      <label for="">USERNAME:</label>
+      <input type="text" name="username" id="" />
+    </div>
+    <div class="formrow">
+      <label for="">PASSWORD:</label>
+      <input type="password" name="password" id="" />
+    </div>
+    <div class="submit">
+      {%if error %}
+      <p class="error">{{message}}</p>
+      {% endif %}
+      <button type="submit">Login</button>
+    </div>
+    <a href="{% url 'users:signup' %}">Create a Account</a>
+  </form>
+</section>
+{% endblock %}
