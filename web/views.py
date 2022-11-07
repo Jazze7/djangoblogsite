@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from main.functions import paginate_instances
+from django.contrib.postgres.search import SearchVector
 
 from posts.models import Post, Category, Author
 # Create your views here.
@@ -14,7 +15,8 @@ def index(request):
 
     q = request.GET.get('q')
     if q:
-        posts = posts.filter(title__icontains=q)
+        posts=posts.annotate(search=SearchVector("title","author__name","categories__title").filter(search=q))
+        posts = posts.filter(title__search=q)
 
     search_author = request.GET.getlist("author")
     if search_author:
@@ -36,7 +38,7 @@ def index(request):
         elif sort == "date-desc":
             posts = posts.order_by("-published_date")
 
-    instances=paginate_instances(request,posts)
+    instances = paginate_instances(request, posts)
 
     context = {
         "title": "HOME",
@@ -45,3 +47,11 @@ def index(request):
         "authors": authors,
     }
     return render(request, 'web/home.html', context=context)
+
+
+def post(request, id):
+    instances = get_object_or_404(Post.objects.filter(id=id))
+    context = {
+        "instances": instances
+    }
+    return render(request, 'web/post.html', context=context)

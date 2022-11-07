@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'posts',
     'ckeditor'
 
@@ -76,10 +77,14 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'blog',
+        'USER': 'jazzi',
+        'PASSWORD': 'qwerty',
+        'HOST': 'localhost',
     }
 }
 
@@ -131,4 +136,4 @@ CKEDITOR_CONFIGS = {
     'default': {
         'width': '100%'
     }
-    }
+}

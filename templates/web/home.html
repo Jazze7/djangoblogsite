@@ -12,7 +12,7 @@
                         <ul class="posts">
                             {% for post in instances %}
                             <li>
-                                <a href="./post.html">
+                                <a href="{% url 'web:post' id=post.id %}">
                                     <div class="blog-image">
                                         <img
                                             src="{{ post.featured_image.url }}"
@@ -21,7 +21,7 @@
                                     </div>
                                     <div class="details">
                                         <div class="date">
-                                            <h4 class="name">{{post.author}}</h4>
+                                            <h4 class="name">{{post.author | cut:"[" |cut:"]" |cut:"'"}} </h4>
                                             <div class="round"></div>
                                             <span> {{post.published_date}} </span>
                                         </div>
@@ -32,16 +32,14 @@
                                             <h6>{{post.short_description}}</h6>
                                         
                                         <p class="description">
-                                        {{post.description}}
+                                        {{post.description | safe | striptags | truncatechars:35}}
                                         </p>
                                     </div>
                                 </a>
                                 <div class="bottom">
-                                    {% for tag in post.categories.all %}
-                                
+                                  {% for tag in post.categories.all %}
                                     <a href="#" class="design one"> {{tag.title}} </a>
-                                    {% endfor %}
-                                
+                                    {% endfor %} 
                                 </div>
                             </li>  
                             {% endfor %}           
@@ -109,7 +107,7 @@
                                 {% for author in authors%}
                                 <label class="checkbox">
                                     <input type="checkbox" value={{author.id}} name="author" />
-                                    <span class="label">{{author.name}}</span>
+                                    <span class="label">{{author.name | cut:"[" |cut:"]" |cut:"'"}}</span>
                                 </label>
                                 {% endfor %}
                             </div>
