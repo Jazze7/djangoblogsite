@@ -9,7 +9,14 @@ from posts.models import Post, Category, Author
 
 def index(request):
     posts = Post.objects.filter(is_deleted=False, is_draft=False)
+    search_author = request.GET.getlist("author")
+    if search_author:
+        posts = Post.objects.filter(author__in=search_author)
 
+    search_categories = request.GET.getlist("category")
+    if search_categories:
+        posts = Post.objects.filter(
+            categories__in=search_categories).distinct()
     categories = Category.objects.all()[:5]
     authors = Author.objects.all()
 
